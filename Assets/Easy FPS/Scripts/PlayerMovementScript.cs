@@ -31,8 +31,11 @@ public class PlayerMovementScript : MonoBehaviour {
 	* Raycasting for meele attacks and input movement handling here.
 	*/
 	void FixedUpdate(){
-		RaycastForMeleeAttacks ();
 
+		if (PlayerManagement.Instance.missLocked)
+			return;
+
+		RaycastForMeleeAttacks ();
 		PlayerMovementLogic ();
 	}
 	/*
@@ -98,14 +101,12 @@ public class PlayerMovementScript : MonoBehaviour {
 			Cursor.visible = true;
 		}
 
+        if (PlayerManagement.Instance.missLocked)
+            return;
 
         Jumping ();
-
 		Crouching();
-
 		WalkingSound ();
-
-
 	}//end update
 
 	/*
@@ -233,9 +234,6 @@ public class PlayerMovementScript : MonoBehaviour {
 
 	public bool been_to_meele_anim = false;
 	private void RaycastForMeleeAttacks(){
-
-
-
 
 		if (meleeAttack_cooldown > -5) {
 			meleeAttack_cooldown -= 1 * Time.deltaTime;

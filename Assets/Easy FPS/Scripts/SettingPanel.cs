@@ -6,11 +6,35 @@ public class SettingPanel : MonoBehaviour
     public GameObject settingPanel;
     private bool isPanelOpen = false;
 
+    private MouseLookScript mouseLookScript;
+
     private void Start()
     {
         ToggleSettings();
-
+        mouseLookScript = FindObjectOfType<MouseLookScript>();
     }
+
+    private void Update()
+    {
+        // 설정창이 닫혀있는데,
+        // ESC도 누르지 않았다면 항상 마우스를 중앙으로 고정시키는 부분
+        // 설정창을 이용하려면 반드시 ESC 이용해야한다.
+        if (settingPanel.activeSelf == false && mouseLookScript.isPressESC == false)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        // ESC 눌리면 마우스 고정 해제
+        if (mouseLookScript.isPressESC == true)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            mouseLookScript.isPressESC = false;
+        }
+    }
+
     // 패널의 상태를 반전시키는 메서드
     public void ToggleSettings()
     {
@@ -27,7 +51,7 @@ public class SettingPanel : MonoBehaviour
             Cursor.visible = true;
 
             // 게임 일시 정지
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
         }
         else
         {
@@ -37,7 +61,7 @@ public class SettingPanel : MonoBehaviour
             Cursor.visible = false;
 
             // 게임 다시 시작
-            Time.timeScale = 1f;
+            //Time.timeScale = 1f;
         }
 
         // timescale 값이 1이면 기본 값 (정상적으로 흐르는 상태)
